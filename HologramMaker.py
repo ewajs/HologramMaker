@@ -2,10 +2,16 @@ from PIL import Image
 import numpy as np
 from shapely.geometry import Point
 from shapely.geometry import Polygon
- 
-def convertImage(file):    
-    SCREEN_WIDTH = 1080
-    SCREEN_HEIGHT = 1920 
+from tkinter import filedialog, Entry, Button, Label, StringVar, Tk, DISABLED, NORMAL
+from time import sleep
+
+def openFile():
+    string_file.set(filedialog.askopenfilename(initialdir="./"))
+
+def convertImage(file, width, height):
+    sleep(0.5)
+    SCREEN_WIDTH = int(width)
+    SCREEN_HEIGHT = int(height) 
     SCREEN_SQUARE = SCREEN_WIDTH
     SCREEN_MODE = 0 # Horizontal
     SCREEN_LEFTOVERX = 0
@@ -58,6 +64,28 @@ def convertImage(file):
     bg.paste(im4, (startx, starty, startx+size, starty+size), im4)
     bg.save("output.png", "PNG")
 
+window = Tk()
+window.title("HologramMaker")
+window.geometry('450x150')
+string_file = StringVar()
+file_txt = Entry(window, width=60, textvariable=string_file)
+file_txt.pack()
+open_btn = Button(window, text="Abrir...", command=openFile)
+open_btn.pack() #grid(column=1,row=0)
+width_lbl = Label(window, text="Ancho:")
+width_lbl.pack() #grid(column=0, row=1)
+width_val = StringVar(value="1920")
+width_txt = Entry(window,width=5,textvariable=width_val)
+width_txt.pack()#grid(column=1, row=1)
+height_lbl = Label(window, text="Alto:")
+height_lbl.pack() #grid(column=0, row=1)
+height_val = StringVar(value="1080")
+height_txt = Entry(window,width=5,textvariable=height_val)
+height_txt.pack()#grid(column=1, row=1)
+convert_btn = Button(window, text="Convertir", command=lambda: convertImage(string_file.get(),width_txt.get(), height_txt.get()))
+convert_btn.pack()
+window.mainloop()
 
-img = input("File name: ")
-convertImage(img)
+
+#img = input("File name: ")
+#convertImage(img)
